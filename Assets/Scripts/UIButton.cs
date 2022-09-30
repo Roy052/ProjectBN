@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class UIButton : MonoBehaviour
 {
-    public int num;
+    public int type;
     public MainSM mainSM;
     private void OnMouseDown()
     {
-        switch (num)
+        switch (type)
         {
             case 0:
                 mainSM.LogON();

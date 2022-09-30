@@ -8,6 +8,7 @@ public class MainSM : MonoBehaviour
     // Log, Agenda, Setting, Quit
     public GameObject[] uiObjects;
     public GameObject[] uiButtons;
+    public PageManager pageManager;
     int currentUIObject = -1;
     void Start()
     {
@@ -42,6 +43,7 @@ public class MainSM : MonoBehaviour
     public void LogON()
     {
         uiObjects[0].SetActive(true);
+        pageManager.PageON();
         currentUIObject = 0;
         UIButtonOFF();
     }
@@ -49,6 +51,7 @@ public class MainSM : MonoBehaviour
     public void LogOFF()
     {
         uiObjects[0].SetActive(false);
+        pageManager.PageOFF();
         currentUIObject = -1;
         UIButtonON();
     }
@@ -56,6 +59,7 @@ public class MainSM : MonoBehaviour
     public void AgendaON()
     {
         uiObjects[1].SetActive(true);
+        pageManager.PageON();
         currentUIObject = 1;
         UIButtonOFF();
     }
@@ -63,6 +67,7 @@ public class MainSM : MonoBehaviour
     public void AgendaOFF()
     {
         uiObjects[1].SetActive(false);
+        pageManager.PageOFF();
         currentUIObject = -1;
         UIButtonON();
     }
@@ -70,6 +75,7 @@ public class MainSM : MonoBehaviour
     public void SettingON()
     {
         uiObjects[2].SetActive(true);
+        pageManager.PageON();
         currentUIObject = 2;
         UIButtonOFF();
     }
@@ -77,6 +83,7 @@ public class MainSM : MonoBehaviour
     public void SettingOFF()
     {
         uiObjects[2].SetActive(false);
+        pageManager.PageOFF();
         currentUIObject = -1;
         UIButtonON();
     }
