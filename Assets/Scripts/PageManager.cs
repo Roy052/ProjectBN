@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PageManager : MonoBehaviour
 {
-    [SerializeField] GameObject pageBeforeBtn, pageNextBtn, pageOFFBtn;
+    [SerializeField] GameObject pageBeforeBtn, pageNextBtn, pageOFFBtn, pageOFFBtn2;
     [SerializeField] GameObject[] pageTags;
 
     //Contents
@@ -15,6 +15,9 @@ public class PageManager : MonoBehaviour
     int pageNum = 0;
     public int maxPageNum = 3;
     public MainSM mainSM;
+
+    GameData gameData = new GameData();
+
     private void Start()
     {
         PageOFF();
@@ -40,7 +43,10 @@ public class PageManager : MonoBehaviour
             pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 2;
         }
 
-        text.text = pageNum + "page";
+        //Page Data
+        Color colortemp = new Color(gameData.pageInfo_Image[pageNum, 0], gameData.pageInfo_Image[pageNum, 1], gameData.pageInfo_Image[pageNum, 2]);
+        image.color = colortemp;
+        text.text = gameData.pageInfo_String[pageNum];
     }
     public void PageOFF()
     {
@@ -71,11 +77,10 @@ public class PageManager : MonoBehaviour
             pageTags[0].GetComponent<SpriteRenderer>().sortingOrder = 0;
             pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 2;
         }
-
-        Color colortemp = image.color;
-        colortemp += new Color(0.1f, 0.1f, 0.1f);
+        
+        Color colortemp = new Color(gameData.pageInfo_Image[pageNum, 0], gameData.pageInfo_Image[pageNum, 1], gameData.pageInfo_Image[pageNum, 2]);
         image.color = colortemp;
-        text.text = pageNum + "page";
+        text.text = gameData.pageInfo_String[pageNum];
     }
     public void BeforePage()
     {
@@ -97,9 +102,46 @@ public class PageManager : MonoBehaviour
             pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 2;
         }
 
-        Color colortemp = image.color;
-        colortemp -= new Color(0.1f, 0.1f, 0.1f);
+        Color colortemp = new Color(gameData.pageInfo_Image[pageNum,0], gameData.pageInfo_Image[pageNum, 1], gameData.pageInfo_Image[pageNum, 2]);
         image.color = colortemp;
-        text.text = pageNum + "page";
+        text.text = gameData.pageInfo_String[pageNum];
+    }
+
+    public void GotoPage(int num)
+    {
+        pageNum = num;
+
+        //Tag
+        if (pageNum == 0)
+        {
+            pageTags[0].GetComponent<SpriteRenderer>().sortingOrder = 2;
+            pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 0;
+        }
+        else
+        {
+            pageTags[0].GetComponent<SpriteRenderer>().sortingOrder = 0;
+            pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 2;
+        }
+
+        //PageBtn
+        if (pageNum == 0)
+        {
+            pageNextBtn.SetActive(true);
+            pageBeforeBtn.SetActive(false);
+        }
+        else if (pageNum == maxPageNum - 1)
+        {
+            pageNextBtn.SetActive(true);
+            pageBeforeBtn.SetActive(false);
+        }
+        else
+        {
+            pageNextBtn.SetActive(true);
+            pageBeforeBtn.SetActive(true);
+        }
+
+        Color colortemp = new Color(gameData.pageInfo_Image[pageNum, 0], gameData.pageInfo_Image[pageNum, 1], gameData.pageInfo_Image[pageNum, 2]);
+        image.color = colortemp;
+        text.text = gameData.pageInfo_String[pageNum];
     }
 }

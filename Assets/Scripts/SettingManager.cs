@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SettingManager : MonoBehaviour
 {
-    GameObject gameManagerObject;
+    GameManager gameManager;
     [SerializeField] Slider volumeSlider;
+    [SerializeField] TextMeshProUGUI languageHead, volumeHead;
 
     private void Start()
     {
-        gameManagerObject = GameObject.Find("GameManager");
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
 
         if (!PlayerPrefs.HasKey("MusicVolume"))
@@ -22,6 +24,8 @@ public class SettingManager : MonoBehaviour
         {
             LoadVolume();
         }
+
+        ChangeLanguage(gameManager.languageType);
     }
 
     public void PauseOFF()
@@ -45,5 +49,21 @@ public class SettingManager : MonoBehaviour
     private void SaveVolume()
     {
         PlayerPrefs.SetFloat("MusicVolume", volumeSlider.value);
+    }
+
+    public void ChangeLanguage(int type)
+    {
+        if (type == 0)
+        {
+            languageHead.text = "Select Language";
+            volumeHead.text = "Volume";
+        }
+        else
+        {
+            languageHead.text = "언어 선택";
+            volumeHead.text = "볼륨";
+        }
+
+        gameManager.ChangeLanguage(type);
     }
 }
