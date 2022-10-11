@@ -8,7 +8,7 @@ public class SettingManager : MonoBehaviour
 {
     GameManager gameManager;
     [SerializeField] Slider volumeSlider;
-    [SerializeField] TextMeshProUGUI languageHead, volumeHead;
+    [SerializeField] TextMeshProUGUI headText, languageHead, volumeHead;
 
     private void Start()
     {
@@ -55,11 +55,13 @@ public class SettingManager : MonoBehaviour
     {
         if (type == 0)
         {
+            headText.text = "Setting";
             languageHead.text = "Select Language";
             volumeHead.text = "Volume";
         }
         else
         {
+            headText.text = "설정";
             languageHead.text = "언어 선택";
             volumeHead.text = "볼륨";
         }
