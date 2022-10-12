@@ -25,6 +25,10 @@ public class PageManager : MonoBehaviour
     int selectedNum = -1;
     public OptionBox[] optionBoxes;
 
+    //Decision
+    [SerializeField] GameObject decisionButton;
+    [SerializeField] TextMeshProUGUI decisionText;
+
     GameManager gm;
     int languageType = 0;
     
@@ -112,6 +116,21 @@ public class PageManager : MonoBehaviour
                 optionTexts[i].gameObject.SetActive(false);
         }
 
+        //Decision
+        if(pageNum == maxPageNum - 1)
+        {
+            decisionButton.SetActive(true);
+            decisionText.gameObject.SetActive(true);
+            if (languageType == 0) decisionText.text = "Decision";
+            else decisionText.text = "∞·¡§";
+            if (selectedNum == -1) decisionText.color = new Color(0.7f, 0, 0);
+            else decisionText.color = new Color(0, 0, 0);
+        }
+        else
+        {
+            decisionButton.SetActive(false);
+            decisionText.gameObject.SetActive(false);
+        }
     }
 
     public void OptionON(int num)
@@ -134,5 +153,11 @@ public class PageManager : MonoBehaviour
 
         selectedNum = num;
         optionTexts[num].color = new Color(0.7f, 0, 0);
+    }
+    
+    public bool IsOptionSelected()
+    {
+        if (selectedNum == -1) return false;
+        else return true;
     }
 }

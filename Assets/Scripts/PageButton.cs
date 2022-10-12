@@ -5,8 +5,10 @@ using UnityEngine;
 public class PageButton : MonoBehaviour
 {
     public int type;
-    public PageManager pageManager;
-    public MainSM mainSM;
+    [SerializeField] PageManager pageManager;
+    [SerializeField] MainSM mainSM;
+    [SerializeField] WeekChanger weekChanger;
+
     private void OnMouseDown()
     {
         if (type == 0)
@@ -25,6 +27,11 @@ public class PageButton : MonoBehaviour
         else if(type == 4)
         {
             pageManager.GotoPage(1);
+        }
+        else if(type == 5)
+        {
+            if(pageManager.IsOptionSelected())
+                StartCoroutine(weekChanger.WeekEnd());
         }
     }
 }

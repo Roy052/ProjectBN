@@ -86,8 +86,18 @@ public class MainSM : MonoBehaviour
         UIButtonON();
     }
 
+    public void ABC()
+    {
+        Debug.Log("ABC");
+        //uiObjects[1].SetActive(false);
+        pageManager.PageOFF();
+        currentUIObject = -1;
+        //UIButtonON();
+    }
+
     public void UIObjectOFF()
     {
+        Debug.Log("A");
         switch (currentUIObject)
         {
             case -1:
@@ -101,12 +111,13 @@ public class MainSM : MonoBehaviour
             case 2:
                 SettingOFF();
                 break;
+            default:
+                break;
         }
     }
 
     void UIButtonON()
     {
-        
         for(int i = 0; i < uiButtons.Length; i++)
             uiButtons[i].SetActive(true);
     }
