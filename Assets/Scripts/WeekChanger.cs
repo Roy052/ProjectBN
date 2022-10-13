@@ -19,15 +19,12 @@ public class WeekChanger : MonoBehaviour
     }
     public IEnumerator WeekEnd()
     {
-        mainSM.ABC();
-        Debug.Log("B");
         gm.weeks++;
         blackFade.SetActive(true);
         StartCoroutine(FadeManager.FadeIn(blackFade.GetComponent<SpriteRenderer>(), 1));
         StartCoroutine(FadeManager.FadeIn(city.GetComponent<SpriteRenderer>(), 1));
         StartCoroutine(FadeManager.FadeIn(weekText, 1));
         yield return new WaitForSeconds(2);
-        Debug.Log("C");
         StartCoroutine(WeekStart());
     }
 
@@ -35,9 +32,10 @@ public class WeekChanger : MonoBehaviour
     {
         if (gm.languageType == 0) weekText.text = gm.weeks + "weeks in office";
         else weekText.text = "재임 " + gm.weeks + "주차";
+        mainSM.AgendaEnd();
         yield return new WaitForSeconds(2);
         StartCoroutine(FadeManager.FadeOut(blackFade.GetComponent<SpriteRenderer>(), 2));
-        StartCoroutine(FadeManager.FadeOut(city.GetComponent<SpriteRenderer>(), 1));
+        StartCoroutine(FadeManager.FadeOut(city.GetComponent<SpriteRenderer>(), 0.6f));
         StartCoroutine(FadeManager.FadeOut(weekText, 1));
         yield return new WaitForSeconds(1);
         blackFade.SetActive(false);

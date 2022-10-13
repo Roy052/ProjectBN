@@ -67,7 +67,6 @@ public class MainSM : MonoBehaviour
     public void AgendaOFF()
     {
         uiObjects[1].SetActive(false);
-        pageManager.PageOFF();
         currentUIObject = -1;
         UIButtonON();
     }
@@ -84,15 +83,6 @@ public class MainSM : MonoBehaviour
         uiObjects[2].SetActive(false);
         currentUIObject = -1;
         UIButtonON();
-    }
-
-    public void ABC()
-    {
-        Debug.Log("ABC");
-        //uiObjects[1].SetActive(false);
-        pageManager.PageOFF();
-        currentUIObject = -1;
-        //UIButtonON();
     }
 
     public void UIObjectOFF()
@@ -125,5 +115,11 @@ public class MainSM : MonoBehaviour
     {
         for (int i = 0; i < uiButtons.Length; i++)
             uiButtons[i].SetActive(false);
+    }
+
+    public void AgendaEnd()
+    {
+        AgendaOFF();
+        pageManager.RefreshPage();
     }
 }

@@ -160,4 +160,15 @@ public class PageManager : MonoBehaviour
         if (selectedNum == -1) return false;
         else return true;
     }
+
+    public void RefreshPage()
+    {
+        pageNum = 0;
+        selectedNum = -1;
+        for(int i = 0; i < 3; i++)
+        {
+            optionTexts[i].color = new Color(0, 0, 0);
+            optionBoxes[i].selected = false;
+        }
+    }
 }
