@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StatusManager : MonoBehaviour
 {
-    [SerializeField] Image[] statusGageImage;
+    [SerializeField] Slider[] statusGage;
     float[] statusValue = new float[4]; //0 : smile, 1 : economy, 2 : corruption, 3 : approval
 
     private void Start()
@@ -21,7 +21,7 @@ public class StatusManager : MonoBehaviour
         for(int i = 0; i < type.Length; i++)
         {
             statusValue[type[i]] += value[i];
-            statusGageImage[type[i]].GetComponent<RectTransform>().localPosition = new Vector3(statusGageImage[i].GetComponent<RectTransform>().localPosition.x, 705 + 90 * statusValue[i], 0);
+            statusGage[type[i]].value = statusValue[type[i]];
         }
     }
 }

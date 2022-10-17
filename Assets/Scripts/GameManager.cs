@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,5 +16,18 @@ public class GameManager : MonoBehaviour
         languageType = type;
     }
 
+    public void NewGameStart()
+    {
+        SceneManager.LoadScene("Main");
+    }
     
+    public void ContinueStart()
+    {
+        SceneManager.LoadScene("Main");
+    }
+
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
 }
