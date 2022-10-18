@@ -68,4 +68,14 @@ public class SettingManager : MonoBehaviour
 
         gameManager.ChangeLanguage(type);
     }
+
+    public void SettingON()
+    {
+        this.gameObject.SetActive(true);
+    }
+
+    public void SettingOFF()
+    {
+        this.gameObject.SetActive(false);
+    }
 }

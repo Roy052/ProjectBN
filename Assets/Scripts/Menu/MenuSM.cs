@@ -9,6 +9,9 @@ public class MenuSM : MonoBehaviour
     [SerializeField] TextMeshProUGUI newGameText, continueText, settingText, quitText;
     [SerializeField] GameObject newGameButton, continueButton, settingButton, quitButton;
 
+    public SettingManager settingManager;
+    bool setON = false;
+
     string[,] texts = new string[2, 4] { 
         { "New Game", "Continue", "Setting", "Quit" }, 
         { "새 게임", "이어하기", "설정", "종료" } };
@@ -19,6 +22,13 @@ public class MenuSM : MonoBehaviour
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         ChangeLanguage(gm.languageType);
+        settingManager.SettingOFF();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && setON == true)
+            SettingOFF();
     }
     public void ChangeLanguage(int type)
     {
@@ -30,11 +40,13 @@ public class MenuSM : MonoBehaviour
     }
     public void SettingON()
     {
-
+        settingManager.SettingON();
+        setON = true;
     }
 
     public void SettingOFF()
     {
-
+        settingManager.SettingOFF();
+        setON = false;
     }
 }
