@@ -10,6 +10,21 @@ public class GameManager : MonoBehaviour
     
     public int weeks = 1;
 
+    //Unique GameManager
+    private static GameManager gameManagerInstance;
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+        if (gameManagerInstance == null)
+        {
+            gameManagerInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void ChangeLanguage(int type)
     {

@@ -13,6 +13,8 @@ public class EndSM : MonoBehaviour
     int endingNum = 0;
     int languageType = 0;
     GameData gameData = new GameData();
+
+    Coroutine tempCoroutine;
     private void Start()
     {
         image.sprite = endSprites[endingNum];
@@ -22,7 +24,7 @@ public class EndSM : MonoBehaviour
             texts[i].gameObject.SetActive(false);
             texts[i].text = gameData.endingTexts[languageType, endingNum, i];
         }
-        StartCoroutine(EndingScene());
+        tempCoroutine = StartCoroutine(EndingScene());
     }
 
     IEnumerator EndingScene()
@@ -38,5 +40,15 @@ public class EndSM : MonoBehaviour
             yield return new WaitForSeconds(3);
         }
         
+    }
+
+    public void SkipScene()
+    {
+        StopCoroutine(tempCoroutine);
+        image.color = new Color(1, 1, 1, 1);
+        for (int i = 0; i < texts.Length; i++)
+        {
+            texts[i].gameObject.SetActive(true);
+        }
     }
 }
