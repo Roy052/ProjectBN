@@ -8,8 +8,12 @@ public class MainSM : MonoBehaviour
     // Log, Agenda, Setting, Quit
     public GameObject[] uiObjects;
     public GameObject[] uiButtons;
+
+    public LogManager logManager;
     public PageManager pageManager;
-    
+    public SettingManager settingManager;
+    public WeekChanger weekChanger;
+
     int currentUIObject = -1;
 
     void Start()
@@ -117,9 +121,16 @@ public class MainSM : MonoBehaviour
             uiButtons[i].SetActive(false);
     }
 
-    public void AgendaEnd()
+    public void WeekEnd()
     {
         AgendaOFF();
         pageManager.RefreshPage();
+        StartCoroutine(weekChanger.WeekEnd());
+    }
+
+    //Agenda -> Log
+    public void LogAgenda(int agendaNum, int optionNum)
+    {
+        logManager.CreateLog(agendaNum, optionNum, Random.Range(0, 3));
     }
 }

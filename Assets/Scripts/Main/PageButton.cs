@@ -19,19 +19,6 @@ public class PageButton : MonoBehaviour
         {
             mainSM.UIObjectOFF();
             pageManager.PageOFF();
-        }
-        else if(type == 3)
-        {
-            pageManager.GotoPage(0);
-        }    
-        else if(type == 4)
-        {
-            pageManager.GotoPage(1);
-        }
-        else if(type == 5)
-        {
-            if(pageManager.IsOptionSelected())
-                StartCoroutine(weekChanger.WeekEnd());
-        }
+        }  
     }
 }

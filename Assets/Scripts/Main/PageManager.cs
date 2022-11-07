@@ -68,15 +68,12 @@ public class PageManager : MonoBehaviour
     void PageChange()
     {
         //Tag
-        if (pageNum == 0)
+        for(int i = 0; i < pageTags.Length; i++)
         {
-            pageTags[0].GetComponent<SpriteRenderer>().sortingOrder = 2;
-            pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 0;
-        }
-        else
-        {
-            pageTags[0].GetComponent<SpriteRenderer>().sortingOrder = 0;
-            pageTags[1].GetComponent<SpriteRenderer>().sortingOrder = 2;
+            if(pageNum == i)
+                pageTags[i].GetComponent<SpriteRenderer>().sortingOrder = 2;
+            else
+                pageTags[i].GetComponent<SpriteRenderer>().sortingOrder = 0;
         }
 
         //PageBtn
@@ -165,10 +162,16 @@ public class PageManager : MonoBehaviour
     {
         pageNum = 0;
         selectedNum = -1;
+        decisionButton.GetComponent<DecisionButton>().saved = false;
         for(int i = 0; i < 3; i++)
         {
             optionTexts[i].color = new Color(0, 0, 0);
             optionBoxes[i].selected = false;
         }
+    }
+
+    public void LogAgenda()
+    {
+        mainSM.LogAgenda(eventNum, selectedNum);
     }
 }
