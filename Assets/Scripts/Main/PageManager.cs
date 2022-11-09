@@ -10,8 +10,8 @@ public class PageManager : MonoBehaviour
     [SerializeField] GameObject[] pageTags;
 
     //Contents
-    [SerializeField] Image image;
-    [SerializeField] Text text;
+    [SerializeField] Image image_AgendaCase;
+    [SerializeField] Text text_AgendaCase;
     [SerializeField] TextMeshProUGUI[] optionTexts;
 
     int pageNum = 0;
@@ -20,12 +20,21 @@ public class PageManager : MonoBehaviour
 
     GameData gameData = new GameData();
 
+    //Result
+    [SerializeField] TextMeshProUGUI resultHeadline;
+    [SerializeField] TextMeshProUGUI resultContent;
+
     //Agenda
     int eventNum = 0;
-    int selectedNum = -1;
+    int selectedNum_Agenda = -1;
     public OptionBox[] optionBoxes;
 
+    //Case&Accident
+    int caseNum = 0;
+    int selectedNum_Case = -1;
+
     //Decision
+    [SerializeField] TextMeshProUGUI decisionSummary;
     [SerializeField] GameObject decisionButton;
     [SerializeField] TextMeshProUGUI decisionText;
 
@@ -93,41 +102,14 @@ public class PageManager : MonoBehaviour
             pageBeforeBtn.SetActive(true);
         }
 
-        Color colortemp = new Color(gameData.pageInfo_Image[pageNum, 0], gameData.pageInfo_Image[pageNum, 1], gameData.pageInfo_Image[pageNum, 2]);
-        image.color = colortemp;
-        text.text = gameData.pageInfo_String[languageType, pageNum];
-
-        //Options
-        if (pageNum == 1)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                optionTexts[i].gameObject.SetActive(true);
-                optionTexts[i].text = gameData.options[languageType, eventNum, i];
-            }
-                
-        }
+        if (pageNum == 0)
+            FirstPage();
+        else if (pageNum == 1)
+            SecondPage();
+        else if (pageNum == 2)
+            ThirdPage();
         else
-        {
-            for (int i = 0; i < 3; i++)
-                optionTexts[i].gameObject.SetActive(false);
-        }
-
-        //Decision
-        if(pageNum == maxPageNum - 1)
-        {
-            decisionButton.SetActive(true);
-            decisionText.gameObject.SetActive(true);
-            if (languageType == 0) decisionText.text = "Decision";
-            else decisionText.text = "결정";
-            if (selectedNum == -1) decisionText.color = new Color(0.7f, 0, 0);
-            else decisionText.color = new Color(0, 0, 0);
-        }
-        else
-        {
-            decisionButton.SetActive(false);
-            decisionText.gameObject.SetActive(false);
-        }
+            FourthPage();
     }
 
     public void OptionON(int num)
@@ -140,28 +122,41 @@ public class PageManager : MonoBehaviour
         optionTexts[num].color = new Color(0, 0, 0);
     }
 
-    public void OptionSelected(int num)
+    public void OptionSelected_Agenda(int num)
     {
-        if (selectedNum != -1)
+        if (selectedNum_Agenda != -1)
         {
-            optionTexts[selectedNum].color = new Color(0, 0, 0);
-            optionBoxes[selectedNum].selected = false;
+            optionTexts[selectedNum_Agenda].color = new Color(0, 0, 0);
+            optionBoxes[selectedNum_Agenda].selected = false;
         }
 
-        selectedNum = num;
+        selectedNum_Agenda = num;
+        optionTexts[num].color = new Color(0.7f, 0, 0);
+    }
+
+    public void OptionSelected_Case(int num)
+    {
+        if (selectedNum_Case != -1)
+        {
+            optionTexts[selectedNum_Case].color = new Color(0, 0, 0);
+            optionBoxes[selectedNum_Case].selected = false;
+        }
+
+        selectedNum_Case = num;
         optionTexts[num].color = new Color(0.7f, 0, 0);
     }
     
     public bool IsOptionSelected()
     {
-        if (selectedNum == -1) return false;
+        if (selectedNum_Agenda == -1 || selectedNum_Case == -1) return false;
         else return true;
     }
 
     public void RefreshPage()
     {
         pageNum = 0;
-        selectedNum = -1;
+        selectedNum_Agenda = -1;
+        selectedNum_Case = -1;
         decisionButton.GetComponent<DecisionButton>().saved = false;
         for(int i = 0; i < 3; i++)
         {
@@ -172,6 +167,128 @@ public class PageManager : MonoBehaviour
 
     public void LogAgenda()
     {
-        mainSM.LogAgenda(eventNum, selectedNum);
+        mainSM.LogAgenda(eventNum, selectedNum_Agenda);
+        mainSM.LogCase(caseNum, selectedNum_Case);
+    }
+
+    //Result
+    private void FirstPage()
+    {
+        RemovePageContent();
+
+        //Headline
+        resultHeadline.gameObject.SetActive(true);
+
+        string ordinalNumber = "";
+        if (gm.weeks == 1 || (gm.weeks > 20 && gm.weeks % 10 == 1)) ordinalNumber = "st";
+        else if (gm.weeks == 2 || (gm.weeks > 20 && gm.weeks % 10 == 2)) ordinalNumber = "nd";
+        else if (gm.weeks == 3 || (gm.weeks > 20 && gm.weeks % 10 == 3)) ordinalNumber = "rd";
+        else ordinalNumber = "th";
+
+        resultHeadline.text = gm.weeks + ordinalNumber + " Week Report";
+
+        //Content
+        resultContent.gameObject.SetActive(true);
+        resultContent.text = gm.weeks + ordinalNumber + " Week Content";
+    }
+
+    //Agenda
+    private void SecondPage()
+    {
+        RemovePageContent();
+
+        image_AgendaCase.gameObject.SetActive(true);
+        text_AgendaCase.gameObject.SetActive(true);
+        text_AgendaCase.text = "Agenda!";
+
+        //Options
+        for (int i = 0; i < 3; i++)
+        {
+            optionTexts[i].gameObject.SetActive(true);
+            optionTexts[i].text = gameData.options[languageType, eventNum, i];
+            if (i == selectedNum_Agenda)
+            {
+                optionBoxes[i].selected = true;
+                optionTexts[i].color = new Color(0.7f, 0, 0);
+            }
+            else
+            {
+                optionBoxes[i].selected = false;
+                optionTexts[i].color = new Color(0, 0, 0);
+            }
+
+            optionBoxes[i].type = 0;
+        }
+    }
+
+    //Case
+    private void ThirdPage()
+    {
+        RemovePageContent();
+
+        image_AgendaCase.gameObject.SetActive(true);
+        text_AgendaCase.gameObject.SetActive(true);
+        text_AgendaCase.text = "Case!";
+
+        //Options
+        for (int i = 0; i < 3; i++)
+        {
+            optionTexts[i].gameObject.SetActive(true);
+            optionTexts[i].text = gameData.options[languageType, eventNum, i];
+            if (i == selectedNum_Case)
+            {
+                optionBoxes[i].selected = true;
+                optionTexts[i].color = new Color(0.7f, 0, 0);
+            }
+            else
+            {
+                optionBoxes[i].selected = false;
+                optionTexts[i].color = new Color(0, 0, 0);
+            }
+            optionBoxes[i].type = 1;
+        }
+
+        
+
+    }
+   
+    //Decision
+    private void FourthPage()
+    {
+        RemovePageContent();
+
+        //Summary
+        decisionSummary.gameObject.SetActive(true);
+        string contentText = "";
+        contentText += "Agenda!" + " : " + (selectedNum_Agenda  + 1) + " Option" + "\n";
+        contentText += "Case!" + " : " + (selectedNum_Case + 1) + " Option" + "\n";
+
+        decisionSummary.text = contentText;
+
+        //Decision
+        decisionButton.SetActive(true);
+        decisionText.gameObject.SetActive(true);
+        if (languageType == 0) decisionText.text = "Decision";
+        else decisionText.text = "결정";
+        if (selectedNum_Agenda == -1) decisionText.color = new Color(0.7f, 0, 0);
+        else decisionText.color = new Color(0, 0, 0);
+    }
+
+    private void RemovePageContent()
+    {
+        //First
+        resultHeadline.gameObject.SetActive(false);
+        resultContent.gameObject.SetActive(false);
+
+        //Second & Third
+        image_AgendaCase.gameObject.SetActive(false);
+        text_AgendaCase.gameObject.SetActive(false);
+        for (int i = 0; i < 3; i++)
+            optionTexts[i].gameObject.SetActive(false);
+
+        //Fourth
+        decisionSummary.gameObject.SetActive(false);
+        decisionButton.SetActive(false);
+        decisionText.gameObject.SetActive(false);
     }
 }

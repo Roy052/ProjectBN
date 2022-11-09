@@ -133,4 +133,10 @@ public class MainSM : MonoBehaviour
     {
         logManager.CreateLog(agendaNum, optionNum, Random.Range(0, 3));
     }
+
+    //Case -> Log
+    public void LogCase(int caseNum, int optionNum)
+    {
+
+    }
 }

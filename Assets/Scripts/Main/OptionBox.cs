@@ -7,6 +7,8 @@ public class OptionBox : MonoBehaviour
     public int num;
     public PageManager pm;
     public bool selected = false;
+
+    public int type;
     private void OnMouseEnter()
     {
         if (selected == false)
@@ -21,7 +23,15 @@ public class OptionBox : MonoBehaviour
 
     private void OnMouseDown()
     {
-        pm.OptionSelected(num);
+        if(type == 0)
+        {
+            pm.OptionSelected_Agenda(num);
+        }
+        else
+        {
+            pm.OptionSelected_Case(num);
+        }
+        
         selected = true;
     }
 }
