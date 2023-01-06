@@ -50,6 +50,7 @@ public class MainSM : MonoBehaviour
     {
         uiObjects[0].SetActive(true);
         currentUIObject = 0;
+        logManager.LogOpen();
         UIButtonOFF();
     }
     
@@ -131,12 +132,12 @@ public class MainSM : MonoBehaviour
     //Agenda -> Log
     public void LogAgenda(int agendaNum, int optionNum)
     {
-        logManager.CreateLog(agendaNum, optionNum, Random.Range(0, 3));
+        logManager.CreateLog(1 ,agendaNum, optionNum, Random.Range(0, 3));
     }
 
     //Case -> Log
-    public void LogCase(int caseNum, int optionNum)
+    public void LogIncident(int caseNum, int optionNum)
     {
-
+        logManager.CreateLog(0, caseNum, optionNum, Random.Range(0, 3));
     }
 }

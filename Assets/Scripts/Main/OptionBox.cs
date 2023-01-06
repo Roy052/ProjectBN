@@ -29,7 +29,7 @@ public class OptionBox : MonoBehaviour
         }
         else
         {
-            pm.OptionSelected_Case(num);
+            pm.OptionSelected_Incident(num);
         }
         
         selected = true;

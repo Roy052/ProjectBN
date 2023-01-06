@@ -10,33 +10,40 @@ public class PageManager : MonoBehaviour
     [SerializeField] GameObject[] pageTags;
 
     //Contents
-    [SerializeField] Image image_AgendaCase;
-    [SerializeField] Text text_AgendaCase;
+    [SerializeField] Image image_AgendaIncident;
+    [SerializeField] Text text_AgendaIncident;
     [SerializeField] TextMeshProUGUI[] optionTexts;
 
     int pageNum = 0;
     public int maxPageNum = 3;
     public MainSM mainSM;
 
+    //Data
     GameData gameData = new GameData();
+    IncidentData incidentData = new IncidentData();
+    AgendaData agendaData = new AgendaData();
 
     //Result
     [SerializeField] TextMeshProUGUI resultHeadline;
     [SerializeField] TextMeshProUGUI resultContent;
 
     //Agenda
-    int eventNum = 0;
+    int agendaNum = 0;
     int selectedNum_Agenda = -1;
     public OptionBox[] optionBoxes;
 
-    //Case&Accident
-    int caseNum = 0;
-    int selectedNum_Case = -1;
+    //incident&Accident
+    int incidentNum = 0;
+    int selectedNum_Incident = -1;
 
     //Decision
-    [SerializeField] TextMeshProUGUI decisionSummary;
+    [SerializeField] TextMeshProUGUI decisionSummaryAgendaHead, decisionSummaryAgenda, decisionSummaryAgendaChoice;
+    [SerializeField] TextMeshProUGUI decisionSummaryIncidentHead, decisionSummaryIncident, decisionSummaryIncidentChoice;
     [SerializeField] GameObject decisionButton;
     [SerializeField] TextMeshProUGUI decisionText;
+    string[,] agendaIncidentHead = { { "Agenda", "정책" }, { "Incident", "사건/사고" } };
+    string[] unselectedText = { "Unselected", "선택하지 않음" };
+    string[] selectedText = { "Your choice : ", "당신의 선택 : " };
 
     GameManager gm;
     int languageType = 0;
@@ -134,21 +141,21 @@ public class PageManager : MonoBehaviour
         optionTexts[num].color = new Color(0.7f, 0, 0);
     }
 
-    public void OptionSelected_Case(int num)
+    public void OptionSelected_Incident(int num)
     {
-        if (selectedNum_Case != -1)
+        if (selectedNum_Incident != -1)
         {
-            optionTexts[selectedNum_Case].color = new Color(0, 0, 0);
-            optionBoxes[selectedNum_Case].selected = false;
+            optionTexts[selectedNum_Incident].color = new Color(0, 0, 0);
+            optionBoxes[selectedNum_Incident].selected = false;
         }
 
-        selectedNum_Case = num;
+        selectedNum_Incident = num;
         optionTexts[num].color = new Color(0.7f, 0, 0);
     }
     
     public bool IsOptionSelected()
     {
-        if (selectedNum_Agenda == -1 || selectedNum_Case == -1) return false;
+        if (selectedNum_Agenda == -1 || selectedNum_Incident == -1) return false;
         else return true;
     }
 
@@ -156,7 +163,7 @@ public class PageManager : MonoBehaviour
     {
         pageNum = 0;
         selectedNum_Agenda = -1;
-        selectedNum_Case = -1;
+        selectedNum_Incident = -1;
         decisionButton.GetComponent<DecisionButton>().saved = false;
         for(int i = 0; i < 3; i++)
         {
@@ -167,8 +174,8 @@ public class PageManager : MonoBehaviour
 
     public void LogAgenda()
     {
-        mainSM.LogAgenda(eventNum, selectedNum_Agenda);
-        mainSM.LogCase(caseNum, selectedNum_Case);
+        mainSM.LogAgenda(agendaNum, selectedNum_Agenda);
+        mainSM.LogIncident(incidentNum, selectedNum_Incident);
     }
 
     //Result
@@ -197,15 +204,15 @@ public class PageManager : MonoBehaviour
     {
         RemovePageContent();
 
-        image_AgendaCase.gameObject.SetActive(true);
-        text_AgendaCase.gameObject.SetActive(true);
-        text_AgendaCase.text = "Agenda!";
+        image_AgendaIncident.gameObject.SetActive(true);
+        text_AgendaIncident.gameObject.SetActive(true);
+        text_AgendaIncident.text = agendaData.agendaHeadlines[agendaNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
         {
             optionTexts[i].gameObject.SetActive(true);
-            optionTexts[i].text = gameData.options[languageType, eventNum, i];
+            optionTexts[i].text = gameData.options[languageType, agendaNum, i];
             if (i == selectedNum_Agenda)
             {
                 optionBoxes[i].selected = true;
@@ -221,21 +228,21 @@ public class PageManager : MonoBehaviour
         }
     }
 
-    //Case
+    //incident
     private void ThirdPage()
     {
         RemovePageContent();
 
-        image_AgendaCase.gameObject.SetActive(true);
-        text_AgendaCase.gameObject.SetActive(true);
-        text_AgendaCase.text = "Case!";
+        image_AgendaIncident.gameObject.SetActive(true);
+        text_AgendaIncident.gameObject.SetActive(true);
+        text_AgendaIncident.text = incidentData.incidentHeadlines[incidentNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
         {
             optionTexts[i].gameObject.SetActive(true);
-            optionTexts[i].text = gameData.options[languageType, eventNum, i];
-            if (i == selectedNum_Case)
+            optionTexts[i].text = gameData.options[languageType, agendaNum, i];
+            if (i == selectedNum_Incident)
             {
                 optionBoxes[i].selected = true;
                 optionTexts[i].color = new Color(0.7f, 0, 0);
@@ -257,13 +264,30 @@ public class PageManager : MonoBehaviour
     {
         RemovePageContent();
 
-        //Summary
-        decisionSummary.gameObject.SetActive(true);
-        string contentText = "";
-        contentText += "Agenda!" + " : " + (selectedNum_Agenda  + 1) + " Option" + "\n";
-        contentText += "Case!" + " : " + (selectedNum_Case + 1) + " Option" + "\n";
+        //Head
+        decisionSummaryAgendaHead.gameObject.SetActive(true);
+        decisionSummaryIncidentHead.gameObject.SetActive(true);
+        decisionSummaryAgendaHead.text = agendaIncidentHead[0, languageType];
+        decisionSummaryIncidentHead.text = agendaIncidentHead[1, languageType];
 
-        decisionSummary.text = contentText;
+        //Summary
+        decisionSummaryAgenda.gameObject.SetActive(true);
+        decisionSummaryIncident.gameObject.SetActive(true);
+        decisionSummaryAgenda.text = agendaData.agendaHeadlines[agendaNum, languageType];
+        decisionSummaryIncident.text = incidentData.incidentHeadlines[incidentNum, languageType];
+
+        //Choice
+        decisionSummaryAgendaChoice.gameObject.SetActive(true);
+        decisionSummaryIncidentChoice.gameObject.SetActive(true);
+        if (selectedNum_Agenda == -1)
+            decisionSummaryAgendaChoice.text = unselectedText[languageType];
+        else
+            decisionSummaryAgendaChoice.text = selectedText[languageType] + (selectedNum_Agenda + 1);
+
+        if (selectedNum_Incident == -1)
+            decisionSummaryIncidentChoice.text = unselectedText[languageType];
+        else
+            decisionSummaryIncidentChoice.text = selectedText[languageType] + (selectedNum_Incident + 1);
 
         //Decision
         decisionButton.SetActive(true);
@@ -281,13 +305,21 @@ public class PageManager : MonoBehaviour
         resultContent.gameObject.SetActive(false);
 
         //Second & Third
-        image_AgendaCase.gameObject.SetActive(false);
-        text_AgendaCase.gameObject.SetActive(false);
+        image_AgendaIncident.gameObject.SetActive(false);
+        text_AgendaIncident.gameObject.SetActive(false);
         for (int i = 0; i < 3; i++)
             optionTexts[i].gameObject.SetActive(false);
 
         //Fourth
-        decisionSummary.gameObject.SetActive(false);
+        decisionSummaryAgendaHead.gameObject.SetActive(false);
+        decisionSummaryIncidentHead.gameObject.SetActive(false);
+
+        decisionSummaryAgenda.gameObject.SetActive(false);
+        decisionSummaryIncident.gameObject.SetActive(false);
+
+        decisionSummaryAgendaChoice.gameObject.SetActive(false);
+        decisionSummaryIncidentChoice.gameObject.SetActive(false);
+
         decisionButton.SetActive(false);
         decisionText.gameObject.SetActive(false);
     }
