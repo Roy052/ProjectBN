@@ -22,6 +22,8 @@ public class LogManager : MonoBehaviour
         { "Netural", "중립적" },
         { "Negative", "부정적" }
     };
+    Color[] responseColors = { new Color(0,0.6f,0), new Color(0.1f, 0.1f, 0.1f), new Color(0.6f, 0, 0) };
+
     IncidentData incidentData;
     AgendaData agendaData;
 
@@ -58,5 +60,6 @@ public class LogManager : MonoBehaviour
 
         string tempStr = "[" + responseTexts[responseNum, languageType] + "]";
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = tempStr;
+        temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().color = responseColors[responseNum];
     }
 }

@@ -24,4 +24,9 @@ public class StatusManager : MonoBehaviour
             statusGage[type[i]].value = statusValue[type[i]];
         }
     }
+
+    public float[] GetStatus()
+    {
+        return statusValue;
+    }
 }

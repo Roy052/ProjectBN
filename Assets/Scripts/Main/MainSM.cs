@@ -13,14 +13,22 @@ public class MainSM : MonoBehaviour
     public PageManager pageManager;
     public SettingManager settingManager;
     public WeekChanger weekChanger;
+    
 
     int currentUIObject = -1;
+
+    //Status
+    public StatusManager statusManager;
+    AgendaData agendaData = new AgendaData();
+    IncidentData incidentData = new IncidentData();
 
     void Start()
     {
         LogOFF();
         AgendaOFF();
         SettingOFF();
+
+        SaveDataScript.CreateSaveData();
     }
 
     // Update is called once per frame
@@ -132,12 +140,42 @@ public class MainSM : MonoBehaviour
     //Agenda -> Log
     public void LogAgenda(int agendaNum, int optionNum)
     {
-        logManager.CreateLog(1 ,agendaNum, optionNum, Random.Range(0, 3));
+        float[] currentStatus = statusManager.GetStatus();
+
+        float tempSum = 0;
+        for(int i = 0; i < currentStatus.Length; i++)
+        {
+            tempSum += currentStatus[i] * agendaData.weight[agendaNum, optionNum, i];
+        }
+
+        float randNum = Random.Range(0, 1.0f);
+
+        if(Mathf.Abs(tempSum - randNum) < 0.2f)
+            logManager.CreateLog(1, agendaNum, optionNum, 1); //Neutral
+        else if(tempSum > randNum)
+            logManager.CreateLog(1, agendaNum, optionNum, 0); //Positive
+        else
+            logManager.CreateLog(1, agendaNum, optionNum, 2); //Negative
     }
 
     //Case -> Log
-    public void LogIncident(int caseNum, int optionNum)
+    public void LogIncident(int incidentNum, int optionNum)
     {
-        logManager.CreateLog(0, caseNum, optionNum, Random.Range(0, 3));
+        float[] currentStatus = statusManager.GetStatus();
+
+        float tempSum = 0;
+        for (int i = 0; i < currentStatus.Length; i++)
+        {
+            tempSum += currentStatus[i] * incidentData.weight[incidentNum, optionNum, i];
+        }
+
+        float randNum = Random.Range(0, 1.0f);
+
+        if (Mathf.Abs(tempSum - randNum) < 0.2f)
+            logManager.CreateLog(0, incidentNum, optionNum, 1); //Neutral
+        else if (tempSum > randNum)
+            logManager.CreateLog(0, incidentNum, optionNum, 0); //Positive
+        else
+            logManager.CreateLog(0, incidentNum, optionNum, 2); //Negative
     }
 }
