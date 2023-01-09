@@ -25,6 +25,17 @@ public class StatusManager : MonoBehaviour
         }
     }
 
+    public void SetStatus(float[] value)
+    {
+        if(value.Length != 4)
+        {
+            Debug.Log("SetStatusError");
+            return;
+        }
+
+        statusValue = value;
+    }
+
     public float[] GetStatus()
     {
         return statusValue;

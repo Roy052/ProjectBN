@@ -7,7 +7,9 @@ using System.IO;
 public class SaveData
 {
     public float[] status;
-    public int[,] logData;
+
+    public int logLength;
+    public int[] logData;
 
     public int[] agendaList;
     public int[] incidentList;
@@ -16,7 +18,8 @@ public class SaveData
     public SaveData()
     {
         status = new float[4] { 0.5f, 0.5f, 0.5f, 0.5f };
-        logData = new int[100, 4];
+        logLength = 0;
+        logData = new int[400];
 
         agendaList = new int[5];
         incidentList = new int[5];
@@ -25,14 +28,16 @@ public class SaveData
     public SaveData(SaveData saveData)
     {
         this.status = saveData.status;
+        this.logLength = saveData.logLength;
         this.logData = saveData.logData;
         this.agendaList = saveData.agendaList;
         this.incidentList = saveData.incidentList;
     }
 
-    public SaveData(float[] status, int[,] logData, int[] agendaList, int[] incidentList)
+    public SaveData(float[] status, int logLength, int[] logData, int[] agendaList, int[] incidentList)
     {
         this.status = status;
+        this.logLength = logLength;
         this.logData = logData;
         this.agendaList = agendaList;
         this.incidentList = incidentList;
@@ -56,9 +61,9 @@ public class SaveDataScript
         File.WriteAllText("./Assets/Save/" + "SaveData.pbn", save);
     }
 
-    static public void SaveIntoJson(float[] status, int[,] logData, int[] agendaList, int[] incidentList)
+    static public void SaveIntoJson(float[] status, int logLength, int[] logData, int[] agendaList, int[] incidentList)
     {
-        SaveData saveData = new SaveData(status, logData, agendaList, incidentList);
+        SaveData saveData = new SaveData(status, logLength,logData, agendaList, incidentList);
         string save = JsonUtility.ToJson(saveData);
         //Debug.Log(save);
         File.WriteAllText("./Assets/Save/" + "SaveData.pbn", save);

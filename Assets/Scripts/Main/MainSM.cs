@@ -22,13 +22,16 @@ public class MainSM : MonoBehaviour
     AgendaData agendaData = new AgendaData();
     IncidentData incidentData = new IncidentData();
 
+    //AgendaIncidentManager
+    public AgendaIncidentManager agendaIncidentManager;
+
     void Start()
     {
         LogOFF();
         AgendaOFF();
         SettingOFF();
 
-        SaveDataScript.CreateSaveData();
+        LoadData();
     }
 
     // Update is called once per frame
@@ -177,5 +180,67 @@ public class MainSM : MonoBehaviour
             logManager.CreateLog(0, incidentNum, optionNum, 0); //Positive
         else
             logManager.CreateLog(0, incidentNum, optionNum, 2); //Negative
+    }
+
+    void LoadData()
+    {
+        SaveData saveData = SaveDataScript.LoadFromJson();
+        if(saveData == null)
+        {
+            SaveDataScript.CreateSaveData();
+            return;
+        }
+
+        //StatusManager
+        statusManager.SetStatus(saveData.status);
+
+        //LogManager
+        //1D array to 2D array
+        int[,] logData = new int[100, 4];
+
+        for(int i = 0; i < saveData.logLength; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                logData[i, j] = saveData.logData[i * 4 + j];
+            }
+        }
+
+        logManager.LoadLog(saveData.logLength, logData);
+
+        //AgendaIncidentManager
+        agendaIncidentManager.LoadAgendaIncidentList(saveData.agendaList, saveData.incidentList);
+    }
+
+    public void SaveData()
+    {
+        float[] status;
+        int logLength;
+        int[] logData;
+        int[] agendaList;
+        int[] incidentList;
+
+
+        //StatusManager
+        status = statusManager.GetStatus();
+
+        //LogManager
+        logLength = logManager.SaveLogLength();
+        logData = new int[400];
+        int[,] logData2D = logManager.SaveLogData();
+        //2D array to 1D array
+        for (int i = 0; i < logLength; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                logData[i * 4 + j] = logData2D[i, j];
+            }
+        }
+
+        //AgendaIncidentManager
+        agendaList = agendaIncidentManager.SaveAgendaList();
+        incidentList = agendaIncidentManager.SaveIncidentList();
+
+        SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
     }
 }

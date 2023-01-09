@@ -30,12 +30,35 @@ public class LogManager : MonoBehaviour
     //language
     int languageType = 0;
     GameManager gm;
+
+    //LogGameObject
+    List<GameObject> logObjects = new List<GameObject>();
+    int logLength = 0;
+    int[,] logData = new int[100, 4];
+
     private void Start()
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
         LogOpen();
         incidentData = new IncidentData();
         agendaData = new AgendaData();
+    }
+
+    public void LoadLog(int logLength, int[,] logData)
+    {
+        this.logData = logData;
+
+        for (int i = 0; i < logLength; i++)
+            CreateLog((short)logData[i, 0], logData[i, 1], logData[i, 2], logData[i, 3]);
+    }
+    public int SaveLogLength()
+    {
+        return logLength;
+    }
+
+    public int[,] SaveLogData()
+    {
+        return logData;
     }
 
     public void LogOpen()
@@ -50,16 +73,29 @@ public class LogManager : MonoBehaviour
             tableHead[i].text = tableHeadTexts[i, languageType];
     }
 
-    public void CreateLog(short incidentOrAgenda,int agendaNum, int optionNum, int responseNum)
+    public void CreateLog(short incidentOrAgenda,int eventNum, int optionNum, int responseNum)
     {
         GameObject temp = Instantiate(logTemplate, logTransform);
         temp.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = incidentAgendaTexts[incidentOrAgenda, languageType];
 
-        temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = (agendaNum + 1) + "st agenda";
+        if (incidentOrAgenda == 0)
+            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = incidentData.incidentHeadlines[eventNum, languageType];
+        else
+            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = agendaData.agendaHeadlines[eventNum, languageType];
         temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (optionNum + 1) + "st option";
 
         string tempStr = "[" + responseTexts[responseNum, languageType] + "]";
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = tempStr;
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().color = responseColors[responseNum];
+
+        logObjects.Add(temp);
+        Debug.Log("LogDataSize : " + logData.Length);
+        logData[logLength, 0] = (int)incidentOrAgenda;
+        logData[logLength, 1] = eventNum;
+        logData[logLength, 2] = optionNum;
+        logData[logLength, 3] = responseNum;
+        logLength++;
     }
+
+    
 }

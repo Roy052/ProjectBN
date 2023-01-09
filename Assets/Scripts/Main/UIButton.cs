@@ -19,6 +19,9 @@ public class UIButton : MonoBehaviour
             case 2:
                 mainSM.SettingON();
                 break;
+            case 3:
+                mainSM.SaveData();
+                break;
         }
 
     }
