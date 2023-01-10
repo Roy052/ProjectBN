@@ -10,8 +10,15 @@ public class PageManager : MonoBehaviour
     [SerializeField] GameObject[] pageTags;
 
     //Contents
-    [SerializeField] Image image_AgendaIncident;
-    [SerializeField] Text text_AgendaIncident;
+    //Agenda
+    [SerializeField] Image image_Agenda;
+    [SerializeField] Text text_Agenda_Headline, text_Agenda_Contents;
+
+    //Incident
+    [SerializeField] Image image_Incident;
+    [SerializeField] Text text_Incident_Headline, text_Incident_Contents;
+
+    //Options
     [SerializeField] TextMeshProUGUI[] optionTexts;
 
     int pageNum = 0;
@@ -204,9 +211,11 @@ public class PageManager : MonoBehaviour
     {
         RemovePageContent();
 
-        image_AgendaIncident.gameObject.SetActive(true);
-        text_AgendaIncident.gameObject.SetActive(true);
-        text_AgendaIncident.text = agendaData.agendaHeadlines[agendaNum, languageType];
+        image_Agenda.gameObject.SetActive(true);
+        text_Agenda_Headline.gameObject.SetActive(true);
+        text_Agenda_Contents.gameObject.SetActive(true);
+        text_Agenda_Headline.text = agendaData.agendaHeadlines[agendaNum, languageType];
+        text_Agenda_Contents.text = agendaData.agendaContents[agendaNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
@@ -233,9 +242,11 @@ public class PageManager : MonoBehaviour
     {
         RemovePageContent();
 
-        image_AgendaIncident.gameObject.SetActive(true);
-        text_AgendaIncident.gameObject.SetActive(true);
-        text_AgendaIncident.text = incidentData.incidentHeadlines[incidentNum, languageType];
+        image_Incident.gameObject.SetActive(true);
+        text_Incident_Headline.gameObject.SetActive(true);
+        text_Incident_Contents.gameObject.SetActive(true);
+        text_Incident_Headline.text = incidentData.incidentHeadlines[incidentNum, languageType];
+        text_Incident_Contents.text = incidentData.incidentContents[incidentNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
@@ -294,7 +305,7 @@ public class PageManager : MonoBehaviour
         decisionText.gameObject.SetActive(true);
         if (languageType == 0) decisionText.text = "Decision";
         else decisionText.text = "°áÁ¤";
-        if (selectedNum_Agenda == -1) decisionText.color = new Color(0.7f, 0, 0);
+        if (selectedNum_Agenda == -1 || selectedNum_Incident == -1) decisionText.color = new Color(0.7f, 0, 0);
         else decisionText.color = new Color(0, 0, 0);
     }
 
@@ -304,9 +315,17 @@ public class PageManager : MonoBehaviour
         resultHeadline.gameObject.SetActive(false);
         resultContent.gameObject.SetActive(false);
 
+        //Second
+        image_Agenda.gameObject.SetActive(false);
+        text_Agenda_Headline.gameObject.SetActive(false);
+        text_Agenda_Contents.gameObject.SetActive(false);
+
+        //Third
+        image_Incident.gameObject.SetActive(false);
+        text_Incident_Headline.gameObject.SetActive(false);
+        text_Incident_Contents.gameObject.SetActive(false);
+
         //Second & Third
-        image_AgendaIncident.gameObject.SetActive(false);
-        text_AgendaIncident.gameObject.SetActive(false);
         for (int i = 0; i < 3; i++)
             optionTexts[i].gameObject.SetActive(false);
 

@@ -23,6 +23,12 @@ public class SaveData
 
         agendaList = new int[5];
         incidentList = new int[5];
+
+        for (int i = 0; i < agendaList.Length; i++)
+            agendaList[i] = 3;
+
+        for (int i = 0; i < incidentList.Length; i++)
+            incidentList[i] = 3;
     }
 
     public SaveData(SaveData saveData)

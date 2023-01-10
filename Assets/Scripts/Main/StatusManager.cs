@@ -11,9 +11,7 @@ public class StatusManager : MonoBehaviour
     private void Start()
     {
         for (int i = 0; i < 4; i++)
-            statusValue[i] = 0.5f;
-
-        ChangeStatus(new int[4] { 0, 1, 2, 3 }, new float[4] { 0, 0, 0, 0 });
+            statusGage[i].enabled = false;
     }
 
     public void ChangeStatus(int[] type, float[] value)
@@ -32,8 +30,9 @@ public class StatusManager : MonoBehaviour
             Debug.Log("SetStatusError");
             return;
         }
-
         statusValue = value;
+        for (int i = 0; i < 4; i++)
+            statusGage[i].value = statusValue[i];
     }
 
     public float[] GetStatus()

@@ -153,12 +153,18 @@ public class MainSM : MonoBehaviour
 
         float randNum = Random.Range(0, 1.0f);
 
-        if(Mathf.Abs(tempSum - randNum) < 0.2f)
-            logManager.CreateLog(1, agendaNum, optionNum, 1); //Neutral
-        else if(tempSum > randNum)
-            logManager.CreateLog(1, agendaNum, optionNum, 0); //Positive
+        int agendaResult;
+
+        if (Mathf.Abs(tempSum - randNum) < 0.2f)
+            agendaResult = 1; //Neutral
+        else if (tempSum > randNum)
+            agendaResult = 0; //Positive
         else
-            logManager.CreateLog(1, agendaNum, optionNum, 2); //Negative
+            agendaResult = 2; //Negative
+
+        logManager.CreateLog(1, agendaNum, optionNum, agendaResult);
+
+        StartCoroutine(agendaIncidentManager.DelayedStatusChange(1, agendaNum, agendaResult, 0.5f));
     }
 
     //Case -> Log
@@ -174,12 +180,18 @@ public class MainSM : MonoBehaviour
 
         float randNum = Random.Range(0, 1.0f);
 
+        int incidentResult;
+
         if (Mathf.Abs(tempSum - randNum) < 0.2f)
-            logManager.CreateLog(0, incidentNum, optionNum, 1); //Neutral
+            incidentResult = 1; //Neutral
         else if (tempSum > randNum)
-            logManager.CreateLog(0, incidentNum, optionNum, 0); //Positive
+            incidentResult = 0; //Positive
         else
-            logManager.CreateLog(0, incidentNum, optionNum, 2); //Negative
+            incidentResult = 2; //Negative
+
+        logManager.CreateLog(0, incidentNum, optionNum, incidentResult);
+
+        StartCoroutine(agendaIncidentManager.DelayedStatusChange(0, incidentNum, incidentResult, 0.5f));
     }
 
     void LoadData()
@@ -188,6 +200,12 @@ public class MainSM : MonoBehaviour
         if(saveData == null)
         {
             SaveDataScript.CreateSaveData();
+            //Status Manager
+            statusManager.SetStatus(new float[4] { 0.5f, 0.5f, 0.5f, 0.5f });
+
+            //AgendaIncidentManager
+            agendaIncidentManager.LoadAgendaIncidentList(null, null);
+
             return;
         }
 
