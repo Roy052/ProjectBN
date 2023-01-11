@@ -221,7 +221,7 @@ public class PageManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             optionTexts[i].gameObject.SetActive(true);
-            optionTexts[i].text = gameData.options[languageType, agendaNum, i];
+            optionTexts[i].text = agendaData.agendaOptions[agendaNum, i, languageType];
             if (i == selectedNum_Agenda)
             {
                 optionBoxes[i].selected = true;
@@ -252,7 +252,7 @@ public class PageManager : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             optionTexts[i].gameObject.SetActive(true);
-            optionTexts[i].text = gameData.options[languageType, agendaNum, i];
+            optionTexts[i].text = incidentData.incidentOptions[incidentNum, i, languageType];
             if (i == selectedNum_Incident)
             {
                 optionBoxes[i].selected = true;

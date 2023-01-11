@@ -6,7 +6,7 @@ public class AgendaIncidentManager : MonoBehaviour
 {
     [SerializeField] StatusManager statusManager;
 
-    int[] agendaList;
+    int[] agendaList; //0 : Alreday happen, 1 : Current, 2 : Pool, 3 : Not happen
     int[] incidentList;
     AgendaData agendaData = new AgendaData();
     IncidentData incidentData = new IncidentData();
@@ -14,6 +14,8 @@ public class AgendaIncidentManager : MonoBehaviour
     List<int> agendaPool;
     List<int> incidentPool;
 
+    //Current Situation
+    int currentAgenda = -1, currentIncident = -1;
     private void Start()
     {
         
@@ -25,7 +27,10 @@ public class AgendaIncidentManager : MonoBehaviour
 
         for(int i = 0; i < agendaList.Length; i++)
         {
-            if (agendaList[i] == 2) agendaPool.Add(i);
+            if (agendaList[i] == 1) //Current
+                currentAgenda = i;
+            else if (agendaList[i] == 2) //Pool
+                agendaPool.Add(i);
         }
     }
 
@@ -35,28 +40,46 @@ public class AgendaIncidentManager : MonoBehaviour
 
         for (int i = 0; i < incidentList.Length; i++)
         {
-            if (incidentList[i] == 2) incidentPool.Add(i);
+            if (incidentList[i] == 1) //Current
+                currentIncident = i;
+            else if (incidentList[i] == 2) //Pool
+                incidentPool.Add(i);
         }
     }
 
     public int CurrentAgenda()
     {
+        if (currentAgenda != -1) return currentAgenda;
+
         int randPos = Random.Range(0, agendaPool.Count);
         int val = agendaPool[randPos];
         agendaPool.RemoveAt(val);
-        agendaList[val] = 0;
+        agendaList[val] = 1;
+        currentAgenda = agendaList[val];
 
         return val;
     }
 
     public int CurrentIncident()
     {
+        if (currentIncident != -1) return currentIncident;
+
         int randPos = Random.Range(0, incidentPool.Count);
         int val = incidentPool[randPos];
         incidentPool.RemoveAt(val);
-        incidentList[val] = 0;
+        incidentList[val] = 1;
+        currentIncident = incidentList[val];
 
         return val;
+    }
+
+    public void WeekOff()
+    {
+        agendaList[currentAgenda] = 0;
+        incidentList[currentIncident] = 0;
+
+        currentAgenda = -1;
+        currentIncident = -1;
     }
 
     void Init_List_Pool()
@@ -73,6 +96,9 @@ public class AgendaIncidentManager : MonoBehaviour
         for (int i = 0; i < incidentLength; i++)
             incidentList[i] = 3;
 
+        //init Pool
+        agendaList[0] = 2;
+        incidentList[0] = 2;
 
     }
 
