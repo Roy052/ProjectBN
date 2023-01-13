@@ -259,6 +259,7 @@ public class MainSM : MonoBehaviour
         agendaList = agendaIncidentManager.SaveAgendaList();
         incidentList = agendaIncidentManager.SaveIncidentList();
 
-        SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
+        //Save
+        //SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
     }
 }

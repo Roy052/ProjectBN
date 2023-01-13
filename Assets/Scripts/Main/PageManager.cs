@@ -42,6 +42,8 @@ public class PageManager : MonoBehaviour
     //incident&Accident
     int incidentNum = 0;
     int selectedNum_Incident = -1;
+    bool[] isOptionActivate_Agenda = new bool[3];
+    bool[] isOptionActivate_Incident = new bool[3];
 
     //Decision
     [SerializeField] TextMeshProUGUI decisionSummaryAgendaHead, decisionSummaryAgenda, decisionSummaryAgendaChoice;
@@ -65,6 +67,21 @@ public class PageManager : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         languageType = gm.languageType;
+
+
+        //OptionCount to isOptionActivate
+        for (int i = 0; i < 3; i++)
+        {
+            if (i >= agendaData.optionCount[agendaNum]) isOptionActivate_Agenda[i] = false;
+            else isOptionActivate_Agenda[i] = true;
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (i >= incidentData.optionCount[incidentNum]) isOptionActivate_Incident[i] = false;
+            else isOptionActivate_Incident[i] = true;
+        }
+
         PageChange();
     }
     public void PageOFF()
@@ -217,10 +234,16 @@ public class PageManager : MonoBehaviour
         text_Agenda_Headline.text = agendaData.agendaHeadlines[agendaNum, languageType];
         text_Agenda_Contents.text = agendaData.agendaContents[agendaNum, languageType];
 
+
         //Options
         for (int i = 0; i < 3; i++)
         {
+            //No more option
+            if (isOptionActivate_Agenda[i] == false) break;
+
             optionTexts[i].gameObject.SetActive(true);
+            optionBoxes[i].gameObject.SetActive(true);
+
             optionTexts[i].text = agendaData.agendaOptions[agendaNum, i, languageType];
             if (i == selectedNum_Agenda)
             {
@@ -251,7 +274,12 @@ public class PageManager : MonoBehaviour
         //Options
         for (int i = 0; i < 3; i++)
         {
+            //No more option
+            if (isOptionActivate_Incident[i] == false) break;
+
             optionTexts[i].gameObject.SetActive(true);
+            optionBoxes[i].gameObject.SetActive(true);
+
             optionTexts[i].text = incidentData.incidentOptions[incidentNum, i, languageType];
             if (i == selectedNum_Incident)
             {
@@ -327,7 +355,10 @@ public class PageManager : MonoBehaviour
 
         //Second & Third
         for (int i = 0; i < 3; i++)
+        {
             optionTexts[i].gameObject.SetActive(false);
+            optionBoxes[i].gameObject.SetActive(false);
+        }
 
         //Fourth
         decisionSummaryAgendaHead.gameObject.SetActive(false);

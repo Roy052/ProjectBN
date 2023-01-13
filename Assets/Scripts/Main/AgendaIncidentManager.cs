@@ -32,6 +32,7 @@ public class AgendaIncidentManager : MonoBehaviour
             else if (agendaList[i] == 2) //Pool
                 agendaPool.Add(i);
         }
+
     }
 
     void IncidentPoolSetup()
@@ -49,6 +50,7 @@ public class AgendaIncidentManager : MonoBehaviour
 
     public int CurrentAgenda()
     {
+        //Already Picked
         if (currentAgenda != -1) return currentAgenda;
 
         int randPos = Random.Range(0, agendaPool.Count);
@@ -62,6 +64,7 @@ public class AgendaIncidentManager : MonoBehaviour
 
     public int CurrentIncident()
     {
+        //Already Picked
         if (currentIncident != -1) return currentIncident;
 
         int randPos = Random.Range(0, incidentPool.Count);
@@ -77,6 +80,18 @@ public class AgendaIncidentManager : MonoBehaviour
     {
         agendaList[currentAgenda] = 0;
         incidentList[currentIncident] = 0;
+        
+        foreach(int agendaNum in agendaData.agendaAdjacentList[currentAgenda])
+        {
+            agendaList[agendaNum] = 2;
+            agendaPool.Add(agendaNum);
+        }
+
+        foreach (int incidentNum in incidentData.incidentAdjacentList[currentIncident])
+        {
+            incidentList[incidentNum] = 2;
+            incidentPool.Add(incidentNum);
+        }
 
         currentAgenda = -1;
         currentIncident = -1;
@@ -100,6 +115,10 @@ public class AgendaIncidentManager : MonoBehaviour
         agendaList[0] = 2;
         incidentList[0] = 2;
 
+        agendaPool = new List<int>();
+        incidentPool = new List<int>();
+        agendaPool.Add(0);
+        incidentPool.Add(0);
     }
 
     public void LoadAgendaIncidentList(int[] agendaList, int[] incidentList)
