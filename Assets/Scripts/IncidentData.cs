@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class IncidentData
 {
-    public string[,] incidentHeadlines = {
+    public string[,] headlines = {
         {"Nothing happen", "사건/사고가 없었다"},
         {"Fire" , "화재" },
         {"Olympic" , "올림픽" },
@@ -11,7 +11,7 @@ public class IncidentData
         {"Serial killer" , "연쇄살인" }
     };
 
-    public string[,] incidentContents = {
+    public string[,] contents = {
         {"Nothing happen", "사건/사고가 없었다"},
         {"Fire intern. Lets burn" , "화재가 발생했다. 불은 삽시간으로 번져" },
         {"Olympic open" , "올림픽을 개최하게되었다." },
@@ -22,11 +22,11 @@ public class IncidentData
     public int[] optionCount =
     { 0, 3, 2, 3, 2};
 
-    public string[,,] incidentOptions =
+    public string[,,] options =
     {
+        { {"", ""}, {"", "" }, {"", "" } },
         { {"On", "실행"}, {"Postpone", "보류" }, {"Reject", "거부" } },
-        { {"", ""}, {"", "" }, {"", "" } },
-        { {"", ""}, {"", "" }, {"", "" } },
+        { {"A", "A"}, {"B", "B" }, {"C", "C" } },
         { {"", ""}, {"", "" }, {"", "" } },
         { {"", ""}, {"", "" }, {"", "" } },
     };
@@ -49,7 +49,7 @@ public class IncidentData
         { { 0.25f, 0.25f, 0.25f, 0.25f }, { 0.25f, 0.25f, 0.25f, 0.25f }, { 0.25f, 0.25f, 0.25f, 0.25f } }
     };
 
-    public List<int>[] incidentAdjacentList = new List<int>[5]
+    public List<int>[] adjacentList = new List<int>[5]
     {
         new List<int>(){1,2},
         new List<int>(){3 },

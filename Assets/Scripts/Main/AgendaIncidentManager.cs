@@ -53,11 +53,19 @@ public class AgendaIncidentManager : MonoBehaviour
         //Already Picked
         if (currentAgenda != -1) return currentAgenda;
 
+        //randpos : pool index, val : pool value 
         int randPos = Random.Range(0, agendaPool.Count);
         int val = agendaPool[randPos];
-        agendaPool.RemoveAt(val);
+        agendaPool.RemoveAt(randPos);
         agendaList[val] = 1;
-        currentAgenda = agendaList[val];
+        currentAgenda = val;
+
+        /*string debugLog = "Current Agenda : " + currentAgenda + ", ";
+        debugLog += "Count : " + agendaPool.Count + ", (";
+        for (int i = 0; i < agendaPool.Count; i++)
+            debugLog += agendaPool[i] + ", ";
+        debugLog += ")";
+        Debug.Log(debugLog);*/
 
         return val;
     }
@@ -69,25 +77,27 @@ public class AgendaIncidentManager : MonoBehaviour
 
         int randPos = Random.Range(0, incidentPool.Count);
         int val = incidentPool[randPos];
-        incidentPool.RemoveAt(val);
+        incidentPool.RemoveAt(randPos);
         incidentList[val] = 1;
-        currentIncident = incidentList[val];
+        currentIncident = val;
 
         return val;
     }
 
-    public void WeekOff()
+    public void WeekEnd()
     {
         agendaList[currentAgenda] = 0;
         incidentList[currentIncident] = 0;
+
+        Debug.Log("Current Agenda : " + currentAgenda);
         
-        foreach(int agendaNum in agendaData.agendaAdjacentList[currentAgenda])
+        foreach(int agendaNum in agendaData.adjacentList[currentAgenda])
         {
             agendaList[agendaNum] = 2;
             agendaPool.Add(agendaNum);
         }
 
-        foreach (int incidentNum in incidentData.incidentAdjacentList[currentIncident])
+        foreach (int incidentNum in incidentData.adjacentList[currentIncident])
         {
             incidentList[incidentNum] = 2;
             incidentPool.Add(incidentNum);
@@ -99,8 +109,8 @@ public class AgendaIncidentManager : MonoBehaviour
 
     void Init_List_Pool()
     {
-        int agendaLength = agendaData.agendaHeadlines.Length;
-        int incidentLength = incidentData.incidentHeadlines.Length;
+        int agendaLength = agendaData.headlines.Length;
+        int incidentLength = incidentData.headlines.Length;
 
         agendaList = new int[agendaLength];
         incidentList = new int[incidentLength];

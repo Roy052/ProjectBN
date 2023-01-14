@@ -75,14 +75,21 @@ public class LogManager : MonoBehaviour
 
     public void CreateLog(short incidentOrAgenda,int eventNum, int optionNum, int responseNum)
     {
+        if (incidentOrAgenda == 0 && optionNum == -2) return;
+
         GameObject temp = Instantiate(logTemplate, logTransform);
         temp.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = incidentAgendaTexts[incidentOrAgenda, languageType];
 
         if (incidentOrAgenda == 0)
-            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = incidentData.incidentHeadlines[eventNum, languageType];
+        {
+            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = incidentData.headlines[eventNum, languageType];
+            temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = incidentData.options[eventNum ,optionNum, languageType];
+        }
         else
-            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = agendaData.agendaHeadlines[eventNum, languageType];
-        temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = (optionNum + 1) + "st option";
+        {
+            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = agendaData.headlines[eventNum, languageType];
+            temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = agendaData.options[eventNum, optionNum, languageType];
+        }
 
         string tempStr = "[" + responseTexts[responseNum, languageType] + "]";
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = tempStr;

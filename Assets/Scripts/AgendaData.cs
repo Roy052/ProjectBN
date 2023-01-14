@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class AgendaData
 {
-    public string[,] agendaHeadlines = 
+    public string[,] headlines = 
         {
         { "Swear" ,"선서" },
         {"Superpack" , "슈퍼팩" },
@@ -12,7 +12,7 @@ public class AgendaData
         {"Censorship" , "검열" }
     };
 
-    public string[,] agendaContents = 
+    public string[,] contents = 
         {
         { "I do solemnly swear. I will faithfully carry out the presidency and defend the Constitution." ,"나는 엄숙히 맹세합니다. 나는 대통령 직을 성실히 수행하며 헌법을 수호할 것입니다." },
         {"Superpack on" , "슈퍼팩 정책" },
@@ -24,11 +24,11 @@ public class AgendaData
     public int[] optionCount =
     { 1, 3, 2, 3, 2};
 
-    public string[,,] agendaOptions =
+    public string[,,] options =
     {
         { {"Swear", "선서한다."}, {"", "" }, {"", "" } },
         { {"On", "실행"}, {"Postpone", "보류" }, {"Reject", "거부" } },
-        { {"", ""}, {"", "" }, {"", "" } },
+        { {"A", "A"}, {"B", "B" }, {"", "" } },
         { {"", ""}, {"", "" }, {"", "" } },
         { {"", ""}, {"", "" }, {"", "" } },
     };
@@ -51,7 +51,7 @@ public class AgendaData
         { { 0.25f, 0.25f, 0.25f, 0.25f }, { 0.25f, 0.25f, 0.25f, 0.25f }, { 0.25f, 0.25f, 0.25f, 0.25f } }
     };
 
-    public List<int>[] agendaAdjacentList = new List<int>[5]
+    public List<int>[] adjacentList = new List<int>[5]
     {
         new List<int>(){1,2},
         new List<int>(){3 },

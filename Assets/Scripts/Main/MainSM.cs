@@ -137,6 +137,7 @@ public class MainSM : MonoBehaviour
     {
         AgendaOFF();
         pageManager.RefreshPage();
+        agendaIncidentManager.WeekEnd();
         StartCoroutine(weekChanger.WeekEnd());
     }
 
@@ -170,6 +171,8 @@ public class MainSM : MonoBehaviour
     //Case -> Log
     public void LogIncident(int incidentNum, int optionNum)
     {
+        if (optionNum == -2) return;
+
         float[] currentStatus = statusManager.GetStatus();
 
         float tempSum = 0;
@@ -199,7 +202,7 @@ public class MainSM : MonoBehaviour
         SaveData saveData = SaveDataScript.LoadFromJson();
         if(saveData == null)
         {
-            SaveDataScript.CreateSaveData();
+            //SaveDataScript.CreateSaveData();
             //Status Manager
             statusManager.SetStatus(new float[4] { 0.5f, 0.5f, 0.5f, 0.5f });
 

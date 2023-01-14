@@ -13,8 +13,8 @@ public class WeekChanger : MonoBehaviour
     private void Start()
     {
         StartCoroutine(WeekStart());
-        if (gm.languageType == 0) weekText.text = gm.weeks + "weeks in office";
-        else weekText.text = "재임 " + gm.weeks + "주차";
+        if (gm.languageType == 0) weekText.text = gm.weeks + " weeks in office";
+        else weekText.text = "재임 " + gm.weeks + " 주차";
 
     }
     public IEnumerator WeekEnd()
@@ -30,8 +30,8 @@ public class WeekChanger : MonoBehaviour
 
     public IEnumerator WeekStart()
     {
-        if (gm.languageType == 0) weekText.text = gm.weeks + "weeks in office";
-        else weekText.text = "재임 " + gm.weeks + "주차";
+        if (gm.languageType == 0) weekText.text = gm.weeks + " weeks in office";
+        else weekText.text = "재임 " + gm.weeks + " 주차";
         yield return new WaitForSeconds(2);
         StartCoroutine(FadeManager.FadeOut(blackFade.GetComponent<SpriteRenderer>(), 2));
         StartCoroutine(FadeManager.FadeOut(city.GetComponent<SpriteRenderer>(), 0.6f));

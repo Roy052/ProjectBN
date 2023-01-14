@@ -68,6 +68,10 @@ public class PageManager : MonoBehaviour
         this.gameObject.SetActive(true);
         languageType = gm.languageType;
 
+        //AgendaNum IncidentNum
+        agendaNum = mainSM.agendaIncidentManager.CurrentAgenda();
+        incidentNum = mainSM.agendaIncidentManager.CurrentIncident();
+        Debug.Log("IncidentNum = " + incidentNum);
 
         //OptionCount to isOptionActivate
         for (int i = 0; i < 3; i++)
@@ -81,6 +85,10 @@ public class PageManager : MonoBehaviour
             if (i >= incidentData.optionCount[incidentNum]) isOptionActivate_Incident[i] = false;
             else isOptionActivate_Incident[i] = true;
         }
+
+        Debug.Log(incidentData.optionCount[incidentNum] + ", " + isOptionActivate_Incident[0] + ", " + isOptionActivate_Incident[1]);
+
+        if(isOptionActivate_Incident[0] == false) selectedNum_Incident = -2;
 
         PageChange();
     }
@@ -231,9 +239,8 @@ public class PageManager : MonoBehaviour
         image_Agenda.gameObject.SetActive(true);
         text_Agenda_Headline.gameObject.SetActive(true);
         text_Agenda_Contents.gameObject.SetActive(true);
-        text_Agenda_Headline.text = agendaData.agendaHeadlines[agendaNum, languageType];
-        text_Agenda_Contents.text = agendaData.agendaContents[agendaNum, languageType];
-
+        text_Agenda_Headline.text = agendaData.headlines[agendaNum, languageType];
+        text_Agenda_Contents.text = agendaData.contents[agendaNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
@@ -244,7 +251,7 @@ public class PageManager : MonoBehaviour
             optionTexts[i].gameObject.SetActive(true);
             optionBoxes[i].gameObject.SetActive(true);
 
-            optionTexts[i].text = agendaData.agendaOptions[agendaNum, i, languageType];
+            optionTexts[i].text = agendaData.options[agendaNum, i, languageType];
             if (i == selectedNum_Agenda)
             {
                 optionBoxes[i].selected = true;
@@ -268,8 +275,8 @@ public class PageManager : MonoBehaviour
         image_Incident.gameObject.SetActive(true);
         text_Incident_Headline.gameObject.SetActive(true);
         text_Incident_Contents.gameObject.SetActive(true);
-        text_Incident_Headline.text = incidentData.incidentHeadlines[incidentNum, languageType];
-        text_Incident_Contents.text = incidentData.incidentContents[incidentNum, languageType];
+        text_Incident_Headline.text = incidentData.headlines[incidentNum, languageType];
+        text_Incident_Contents.text = incidentData.contents[incidentNum, languageType];
 
         //Options
         for (int i = 0; i < 3; i++)
@@ -280,7 +287,7 @@ public class PageManager : MonoBehaviour
             optionTexts[i].gameObject.SetActive(true);
             optionBoxes[i].gameObject.SetActive(true);
 
-            optionTexts[i].text = incidentData.incidentOptions[incidentNum, i, languageType];
+            optionTexts[i].text = incidentData.options[incidentNum, i, languageType];
             if (i == selectedNum_Incident)
             {
                 optionBoxes[i].selected = true;
@@ -312,8 +319,8 @@ public class PageManager : MonoBehaviour
         //Summary
         decisionSummaryAgenda.gameObject.SetActive(true);
         decisionSummaryIncident.gameObject.SetActive(true);
-        decisionSummaryAgenda.text = agendaData.agendaHeadlines[agendaNum, languageType];
-        decisionSummaryIncident.text = incidentData.incidentHeadlines[incidentNum, languageType];
+        decisionSummaryAgenda.text = agendaData.headlines[agendaNum, languageType];
+        decisionSummaryIncident.text = incidentData.headlines[incidentNum, languageType];
 
         //Choice
         decisionSummaryAgendaChoice.gameObject.SetActive(true);
@@ -321,12 +328,19 @@ public class PageManager : MonoBehaviour
         if (selectedNum_Agenda == -1)
             decisionSummaryAgendaChoice.text = unselectedText[languageType];
         else
-            decisionSummaryAgendaChoice.text = selectedText[languageType] + (selectedNum_Agenda + 1);
+            decisionSummaryAgendaChoice.text = selectedText[languageType] 
+                + agendaData.options[agendaNum,selectedNum_Agenda,languageType];
 
         if (selectedNum_Incident == -1)
             decisionSummaryIncidentChoice.text = unselectedText[languageType];
         else
-            decisionSummaryIncidentChoice.text = selectedText[languageType] + (selectedNum_Incident + 1);
+        {
+            if (selectedNum_Incident == -2)
+                decisionSummaryIncidentChoice.text = "";
+            else
+                decisionSummaryIncidentChoice.text = selectedText[languageType] + incidentData.options[incidentNum, selectedNum_Incident, languageType];
+        }
+            
 
         //Decision
         decisionButton.SetActive(true);
