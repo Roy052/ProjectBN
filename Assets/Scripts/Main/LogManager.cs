@@ -16,7 +16,7 @@ public class LogManager : MonoBehaviour
         {"Choice", "선택" },
         {"Response", "반응" }
     };
-    string[,] incidentAgendaTexts = new string[2, 2] { { "Incident", "사건/사고" }, { "Agenda", "정책" } };
+    string[,] incidentAgendaTexts = new string[2, 2] { { "Agenda", "정책" }, { "Incident", "사건/사고" } };
     string[,] responseTexts = new string[3, 2] {
         { "Positive", "긍정적" },
         { "Netural", "중립적" },
@@ -39,9 +39,11 @@ public class LogManager : MonoBehaviour
     private void Start()
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+
         LogOpen();
-        incidentData = new IncidentData();
+
         agendaData = new AgendaData();
+        incidentData = new IncidentData();
     }
 
     public void LoadLog(int logLength, int[,] logData)
@@ -73,31 +75,31 @@ public class LogManager : MonoBehaviour
             tableHead[i].text = tableHeadTexts[i, languageType];
     }
 
-    public void CreateLog(short incidentOrAgenda,int eventNum, int optionNum, int responseNum)
+    public void CreateLog(short agendaOrIncident,int eventNum, int optionNum, int responseNum)
     {
-        if (incidentOrAgenda == 0 && optionNum == -2) return;
+        if (agendaOrIncident == 1 && optionNum == -2) return;
 
         GameObject temp = Instantiate(logTemplate, logTransform);
-        temp.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = incidentAgendaTexts[incidentOrAgenda, languageType];
+        temp.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = incidentAgendaTexts[agendaOrIncident, languageType];
 
-        if (incidentOrAgenda == 0)
-        {
-            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = incidentData.headlines[eventNum, languageType];
-            temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = incidentData.options[eventNum ,optionNum, languageType];
-        }
-        else
+        if (agendaOrIncident == 0)
         {
             temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = agendaData.headlines[eventNum, languageType];
             temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = agendaData.options[eventNum, optionNum, languageType];
+        }
+        else
+        {
+            temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = incidentData.headlines[eventNum, languageType];
+            temp.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = incidentData.options[eventNum, optionNum, languageType];
         }
 
         string tempStr = "[" + responseTexts[responseNum, languageType] + "]";
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = tempStr;
         temp.transform.GetChild(3).GetComponent<TextMeshProUGUI>().color = responseColors[responseNum];
 
+        Debug.Log(temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text);
         logObjects.Add(temp);
-        Debug.Log("LogDataSize : " + logData.Length);
-        logData[logLength, 0] = (int)incidentOrAgenda;
+        logData[logLength, 0] = (int)agendaOrIncident;
         logData[logLength, 1] = eventNum;
         logData[logLength, 2] = optionNum;
         logData[logLength, 3] = responseNum;

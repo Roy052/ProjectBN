@@ -32,7 +32,7 @@ public class PageManager : MonoBehaviour
 
     //Result
     [SerializeField] TextMeshProUGUI resultHeadline;
-    [SerializeField] TextMeshProUGUI resultContent;
+    [SerializeField] TextMeshProUGUI resultContent, resultContent_Response;
 
     //Agenda
     int agendaNum = 0;
@@ -56,6 +56,7 @@ public class PageManager : MonoBehaviour
 
     GameManager gm;
     int languageType = 0;
+    List<int[]> currentLogData;
     
     private void Start()
     {
@@ -67,6 +68,24 @@ public class PageManager : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         languageType = gm.languageType;
+
+        //Result
+        if(currentLogData == null)
+        {
+            currentLogData = new List<int[]>();
+
+            int length = mainSM.logManager.SaveLogLength();
+            int[,] logData = mainSM.logManager.SaveLogData();
+
+            if (length != 0)
+            {
+                ///if incident occur
+                if (logData[length - 1, 0] != 0)
+                    currentLogData.Add(new int[4] { logData[length - 2, 0], logData[length - 2, 1], logData[length - 2, 2], logData[length - 2, 3] });
+                currentLogData.Add(new int[4] { logData[length - 1, 0], logData[length - 1, 1], logData[length - 1, 2], logData[length - 1, 3] });
+            }
+        }
+        
 
         //AgendaNum IncidentNum
         agendaNum = mainSM.agendaIncidentManager.CurrentAgenda();
@@ -194,9 +213,13 @@ public class PageManager : MonoBehaviour
     public void RefreshPage()
     {
         pageNum = 0;
+
         selectedNum_Agenda = -1;
         selectedNum_Incident = -1;
         decisionButton.GetComponent<DecisionButton>().saved = false;
+
+        currentLogData = null;
+
         for(int i = 0; i < 3; i++)
         {
             optionTexts[i].color = new Color(0, 0, 0);
@@ -218,17 +241,62 @@ public class PageManager : MonoBehaviour
         //Headline
         resultHeadline.gameObject.SetActive(true);
 
-        string ordinalNumber = "";
-        if (gm.weeks == 1 || (gm.weeks > 20 && gm.weeks % 10 == 1)) ordinalNumber = "st";
-        else if (gm.weeks == 2 || (gm.weeks > 20 && gm.weeks % 10 == 2)) ordinalNumber = "nd";
-        else if (gm.weeks == 3 || (gm.weeks > 20 && gm.weeks % 10 == 3)) ordinalNumber = "rd";
-        else ordinalNumber = "th";
+        if(languageType == 0)
+        {
+            string ordinalNumber = "";
+            if (gm.weeks == 1 || (gm.weeks > 20 && gm.weeks % 10 == 1)) ordinalNumber = "st";
+            else if (gm.weeks == 2 || (gm.weeks > 20 && gm.weeks % 10 == 2)) ordinalNumber = "nd";
+            else if (gm.weeks == 3 || (gm.weeks > 20 && gm.weeks % 10 == 3)) ordinalNumber = "rd";
+            else ordinalNumber = "th";
 
-        resultHeadline.text = gm.weeks + ordinalNumber + " Week Report";
+            resultHeadline.text = gm.weeks + ordinalNumber + " Week Report";
+        }
+        else
+        {
+            resultHeadline.text = gm.weeks + "주차 리포트";
+        }
 
         //Content
         resultContent.gameObject.SetActive(true);
-        resultContent.text = gm.weeks + ordinalNumber + " Week Content";
+        resultContent_Response.gameObject.SetActive(true);
+        if (currentLogData.Count == 0)
+        {
+            if (languageType == 0)
+                resultContent.text = "Congratulations on your inauguration as president.";
+            else
+                resultContent.text = "대통령 취임을 축하합니다.";
+        }
+        else
+        {
+            string resultText = "";
+            string resultText_Response = "";
+
+            foreach(int[] logData in currentLogData) //0 : agendaOrIncident, 1 : eventNum, 2 : optionNum, 3 : responseNum
+            {
+                if (logData[0] == 0)
+                {
+                    resultText += agendaData.headlines[logData[1], languageType];
+                    resultText += " / ";
+                    resultText += agendaData.options[logData[1] ,logData[2], languageType];
+                }
+                else
+                {
+                    resultText += incidentData.headlines[logData[1], languageType];
+                    resultText += " / ";
+                    resultText += incidentData.options[logData[1], logData[2], languageType];
+                }
+
+                resultText_Response += "[ R ]";
+
+                resultText += "\n";
+                resultText_Response += "\n";
+            }
+
+            resultContent.text = resultText;
+            resultContent_Response.text = resultText_Response;
+        }
+        
+
     }
 
     //Agenda
@@ -356,6 +424,7 @@ public class PageManager : MonoBehaviour
         //First
         resultHeadline.gameObject.SetActive(false);
         resultContent.gameObject.SetActive(false);
+        resultContent_Response.gameObject.SetActive(false);
 
         //Second
         image_Agenda.gameObject.SetActive(false);

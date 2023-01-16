@@ -163,7 +163,7 @@ public class MainSM : MonoBehaviour
         else
             agendaResult = 2; //Negative
 
-        logManager.CreateLog(1, agendaNum, optionNum, agendaResult);
+        logManager.CreateLog(0, agendaNum, optionNum, agendaResult);
 
         StartCoroutine(agendaIncidentManager.DelayedStatusChange(1, agendaNum, agendaResult, 0.5f));
     }
@@ -192,7 +192,7 @@ public class MainSM : MonoBehaviour
         else
             incidentResult = 2; //Negative
 
-        logManager.CreateLog(0, incidentNum, optionNum, incidentResult);
+        logManager.CreateLog(1, incidentNum, optionNum, incidentResult);
 
         StartCoroutine(agendaIncidentManager.DelayedStatusChange(0, incidentNum, incidentResult, 0.5f));
     }
@@ -200,7 +200,7 @@ public class MainSM : MonoBehaviour
     void LoadData()
     {
         SaveData saveData = SaveDataScript.LoadFromJson();
-        if(saveData == null)
+        if(saveData == null || saveData.logLength == 0)
         {
             //SaveDataScript.CreateSaveData();
             //Status Manager
@@ -263,6 +263,6 @@ public class MainSM : MonoBehaviour
         incidentList = agendaIncidentManager.SaveIncidentList();
 
         //Save
-        //SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
+        SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
     }
 }
