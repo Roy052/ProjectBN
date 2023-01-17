@@ -18,9 +18,15 @@ public class MenuSM : MonoBehaviour
     int languageType = 0;
 
     public GameManager gm;
+    bool isSaveExist = false;
     private void Start()
     {
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        if (SaveDataScript.LoadFromJson() != null)
+            isSaveExist = true;
+
+        if (isSaveExist == false)
+            continueButton.gameObject.SetActive(false);
         ChangeLanguage(gm.languageType);
         settingManager.SettingOFF();
     }
@@ -35,6 +41,8 @@ public class MenuSM : MonoBehaviour
         languageType = type;
         newGameText.text = texts[languageType, 0];
         continueText.text = texts[languageType, 1];
+        if (isSaveExist == false)
+            continueText.color = Color.gray;
         settingText.text = texts[languageType, 2];
         quitText.text = texts[languageType, 3];
     }

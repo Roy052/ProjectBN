@@ -29,11 +29,16 @@ public class GameManager : MonoBehaviour
     public void ChangeLanguage(int type)
     {
         languageType = type;
+        if(SceneManager.GetActiveScene().name == "Menu")
+        {
+            MenuSM menuSM = GameObject.Find("MenuSM").GetComponent<MenuSM>();
+            menuSM.ChangeLanguage(type);
+        }
     }
 
     public void NewGameStart()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Intro");
     }
     
     public void ContinueStart()
@@ -44,6 +49,10 @@ public class GameManager : MonoBehaviour
     public void ToMenu()
     {
         SceneManager.LoadScene("Menu");
+    }
+    public void ToMain()
+    {
+        SceneManager.LoadScene("Main");
     }
 
     public void GameQuit()
