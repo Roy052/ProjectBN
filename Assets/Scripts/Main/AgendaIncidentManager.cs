@@ -16,6 +16,10 @@ public class AgendaIncidentManager : MonoBehaviour
 
     //Current Situation
     int currentAgenda = -1, currentIncident = -1;
+
+    public Sprite agendaImage;
+    public Sprite incidentImage;
+    [SerializeField] Sprite emptyImage;
     private void Start()
     {
         
@@ -60,12 +64,7 @@ public class AgendaIncidentManager : MonoBehaviour
         agendaList[val] = 1;
         currentAgenda = val;
 
-        /*string debugLog = "Current Agenda : " + currentAgenda + ", ";
-        debugLog += "Count : " + agendaPool.Count + ", (";
-        for (int i = 0; i < agendaPool.Count; i++)
-            debugLog += agendaPool[i] + ", ";
-        debugLog += ")";
-        Debug.Log(debugLog);*/
+        agendaImage = Resources.Load<Sprite>("Arts/AgendaIncident/A" + currentAgenda);
 
         return val;
     }
@@ -73,13 +72,19 @@ public class AgendaIncidentManager : MonoBehaviour
     public int CurrentIncident()
     {
         //Already Picked
-        if (currentIncident != -1) return currentIncident;
+        if (currentIncident != -1)
+        {
+            incidentImage = emptyImage;
+            return currentIncident;
+        }
 
         int randPos = Random.Range(0, incidentPool.Count);
         int val = incidentPool[randPos];
         incidentPool.RemoveAt(randPos);
         incidentList[val] = 1;
         currentIncident = val;
+
+        incidentImage = Resources.Load<Sprite>("Arts/AgendaIncident/I" + currentIncident);
 
         return val;
     }

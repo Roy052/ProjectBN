@@ -307,6 +307,8 @@ public class PageManager : MonoBehaviour
         image_Agenda.gameObject.SetActive(true);
         text_Agenda_Headline.gameObject.SetActive(true);
         text_Agenda_Contents.gameObject.SetActive(true);
+
+        image_Agenda.sprite = mainSM.agendaIncidentManager.agendaImage;
         text_Agenda_Headline.text = agendaData.headlines[agendaNum, languageType];
         text_Agenda_Contents.text = agendaData.contents[agendaNum, languageType];
 
@@ -343,6 +345,8 @@ public class PageManager : MonoBehaviour
         image_Incident.gameObject.SetActive(true);
         text_Incident_Headline.gameObject.SetActive(true);
         text_Incident_Contents.gameObject.SetActive(true);
+
+        image_Incident.sprite = mainSM.agendaIncidentManager.incidentImage;
         text_Incident_Headline.text = incidentData.headlines[incidentNum, languageType];
         text_Incident_Contents.text = incidentData.contents[incidentNum, languageType];
 

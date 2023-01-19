@@ -34,6 +34,11 @@ public class GameManager : MonoBehaviour
             MenuSM menuSM = GameObject.Find("MenuSM").GetComponent<MenuSM>();
             menuSM.ChangeLanguage(type);
         }
+        else if(SceneManager.GetActiveScene().name == "Main")
+        {
+            MainSM mainSM = GameObject.Find("MainSM").GetComponent<MainSM>();
+            mainSM.ChangeLanguage(type);
+        }
     }
 
     public void NewGameStart()

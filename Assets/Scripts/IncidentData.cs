@@ -13,7 +13,7 @@ public class IncidentData
 
     public string[,] contents = {
         {"Nothing happen", "사건/사고가 없었다"},
-        {"Fire intern. Lets burn" , "화재가 발생했다. 불은 삽시간으로 번져" },
+        {"Fire it up. Lets burn" , "화재가 발생했다. 불은 삽시간으로 번져" },
         {"Olympic open" , "올림픽을 개최하게되었다." },
         {"Bomb terror occured" , "폭탄 테러가 발생했다" },
         {"Uncatched serial killer" , "연쇄 살인 사건이 발생했다. 범인은 아직 잡히지 않았다." }

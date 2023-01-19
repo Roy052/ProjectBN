@@ -25,11 +25,19 @@ public class MainSM : MonoBehaviour
     //AgendaIncidentManager
     public AgendaIncidentManager agendaIncidentManager;
 
+    //Main Texts
+    [SerializeField] Text[] mainTexts;
+    string[,] mainTexts_string = { {"TASK", "업무" }, { "SETTING", "세팅" }, { "LOG", "기록" }, { "EXIT", "나가기" } };
+    GameManager gm;
+    int languageType = 0;
     void Start()
     {
         LogOFF();
         AgendaOFF();
         SettingOFF();
+
+        gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        ChangeLanguage(gm.languageType);
 
         LoadData();
     }
@@ -264,5 +272,12 @@ public class MainSM : MonoBehaviour
 
         //Save
         SaveDataScript.SaveIntoJson(status, logLength, logData, agendaList, incidentList);
+    }
+
+    public void ChangeLanguage(int type)
+    {
+        languageType = type;
+        for (int i = 0; i < 4; i++)
+            mainTexts[i].text = mainTexts_string[i, languageType];
     }
 }

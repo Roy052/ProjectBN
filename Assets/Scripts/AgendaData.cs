@@ -6,7 +6,7 @@ public class AgendaData
     public string[,] headlines = 
         {
         { "Swear" ,"선서" },
-        {"Superpack" , "슈퍼팩" },
+        {"Super PAC" , "슈퍼팩" },
         {"Making money" , "비자금 조성" },
         {"Neutral" , "중립국" },
         {"Censorship" , "검열" }
@@ -15,7 +15,7 @@ public class AgendaData
     public string[,] contents = 
         {
         { "I do solemnly swear. I will faithfully carry out the presidency and defend the Constitution." ,"나는 엄숙히 맹세합니다. 나는 대통령 직을 성실히 수행하며 헌법을 수호할 것입니다." },
-        {"Superpack on" , "슈퍼팩 정책" },
+        {"Super PAC on" , "슈퍼팩 정책" },
         {"Making money" , "비자금 조성을 목적으로 한 유령 회사 설립" },
         {"Netural sengen" , "중립국 선언" },
         {"Censorship for every contents" , "모든 매체에 대한 검열 정책" }
